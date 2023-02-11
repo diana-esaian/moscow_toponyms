@@ -1,12 +1,11 @@
 import os
 import csv 
+import json
 import pandas as pd
 import pymorphy2
 import spacy
 from natasha import (Segmenter, MorphVocab, NewsEmbedding, NewsMorphTagger,
                      NewsSyntaxParser, NewsNERTagger, Doc)
-# moving up one directory 
-os.chdir("..")
 # for spacy
 nlp = spacy.load("ru_core_news_sm")
 nlp.max_length = 20000000
@@ -20,35 +19,6 @@ morph_tagger = NewsMorphTagger(emb)
 syntax_parser = NewsSyntaxParser(emb)
 ner_tagger = NewsNERTagger(emb)
 
-# black_list = []
-# names_black_list = []
-
-
-def black_lists_constructor():
-    black_list = []
-    names_black_list = []
-    with open('data/black_list.csv', 'r') as read_obj:
-        b_list = csv.reader(read_obj)
-        list_of_csv = list(b_list)
-
-    for i in list_of_csv:
-        loc = ''.join(i).lower()
-        black_list.append(loc)
-
-    with open('data/names_rus.csv', 'r') as f:
-        n_list = csv.reader(f)
-        list_of_names = list(n_list)
-
-    for i in list_of_names:
-        loct = ''.join(i).lower()
-        names_black_list.append(loct)
-
-    return black_list names_black_list
-
-def read(file):
-    with open(file) as text:
-        book = text.read()
-    return book
 
 def spacy(text):
     spacy_dict = {}
@@ -91,8 +61,9 @@ def merging_blacklists(spacy_names, natasha_names):
         if position in natasha_names.keys():
             if natasha_names[position] not in extracted_names:
                 extracted_names.append(natasha_names[position])
-
-    full_black_list = black_list + names_black_list + extracted_names
+    with open('black_list.json') as f:
+      black_list = json.load(f)
+    full_black_list = black_list + extracted_names
     return full_black_list
 
 def inner_merging_filtering(full_black_list, spacy_dict, natasha_dict):
