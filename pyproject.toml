@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "moscow_toponyms"
 authors = [{name = "Diana Esaian", email = "diana.esaian@gmail.com"}]
-readme = "README.rst"
+description-file = "README.rst"
 description = "Moscow toponyms extractor for Russian texts"
 license = {file = "LICENSE"}
 classifiers = [
