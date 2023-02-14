@@ -24,6 +24,12 @@ dependencies = [
     "pandas >= 1.5.3"
 ]
 
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["moscow_toponyms"]
+
 [project.optional-dependencies]
 test = [
     "pytest",
