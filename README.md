@@ -3,10 +3,10 @@
 
 Returned attributes for extracted Moscow toponym:
 
--   `toponym` - toponym in an inflected form   (e.g., _Кремле_)
--   `lemmatized_toponym` - toponym in the base form (e.g., _Кремль_)
--   `start_char` - start character index (_79_)
--   `stop_char` - end character index (_85_)
+-   `toponym` - toponym in an inflected form   (_e.g., Кремле_)
+-   `lemmatized_toponym` - toponym in the base form (_e.g., Кремль_)
+-   `start_char` - start character index (_e.g., 79_)
+-   `stop_char` - end character index (_e.g., 85_)
 
 ## Installation
 1. Install the package using pip:
