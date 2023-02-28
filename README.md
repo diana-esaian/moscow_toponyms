@@ -48,7 +48,7 @@ Add the extracted names to the existing black list for cleaner output:
 ```python
 >>> black_list = extract_toponyms.merging_blacklists(spacy_names, natasha_names)
 ```
-Final 
+Filter all extracted toponyms and return only Moscow toponyms in inflected and base forms, their start and end character indices
 ``` python
 >>> final_results = extract_toponyms.inner_merging_filtering(black_list, spacy_dict, natasha_dict)
 >>> print(final_results)
