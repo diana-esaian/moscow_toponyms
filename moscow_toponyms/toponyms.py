@@ -5,7 +5,7 @@ import spacy
 from natasha import (Segmenter, MorphVocab, NewsEmbedding, NewsMorphTagger,
                      NewsSyntaxParser, NewsNERTagger, Doc)
 # for spacy
-nlp = spacy.load(os.path.join(os.path.dirname(__file__), "ru_core_news_sm"))
+nlp = spacy.load("ru_core_news_sm")
 nlp.max_length = 20000000
 # for pymorphy2
 morph = pymorphy2.MorphAnalyzer()
@@ -20,11 +20,14 @@ ner_tagger = NewsNERTagger(emb)
 BASE_DIR = os.path.dirname(__file__)
 
 class ExtractMosToponyms():
-    def spacy_extract(text):
+    def __init__(self, text):
+        self.text = text
+
+    def spacy_extract(self):
         spacy_dict = {}
         spacy_names = {}
 
-        doc_spacy = nlp(text)
+        doc_spacy = nlp(self.text)
 
         for ent in doc_spacy.ents:
             if ent.label_ == 'LOC':
@@ -34,11 +37,11 @@ class ExtractMosToponyms():
                 spacy_names[ent.start_char] = ent.lemma_
         return spacy_dict, spacy_names
 
-    def natasha_extract(text):  
+    def natasha_extract(self):  
         natasha_dict = {}
         natasha_names = {}
                         
-        doc_natasha = Doc(text)
+        doc_natasha = Doc(self.text)
         doc_natasha.segment(segmenter)
         doc_natasha.tag_morph(morph_tagger)
         doc_natasha.parse_syntax(syntax_parser)
@@ -53,7 +56,7 @@ class ExtractMosToponyms():
                 natasha_names[span.start] = (span.normal)
         return natasha_dict, natasha_names
 
-    def merging_blacklists(spacy_names, natasha_names):
+    def merging_blacklists(self, spacy_names, natasha_names):
         extracted_names = []
         for i in spacy_names.keys():
             position = i
@@ -65,7 +68,7 @@ class ExtractMosToponyms():
         full_black_list = black_list + extracted_names
         return full_black_list
 
-    def inner_merging_filtering(full_black_list, spacy_dict, natasha_dict):
+    def inner_merging_filtering(self, full_black_list, spacy_dict, natasha_dict):
         pre_final_spacy = {}
         pre_final_natasha = {}
         for i in spacy_dict.keys():
@@ -90,15 +93,23 @@ class ExtractMosToponyms():
                 final_result.append(final_dict)
         return final_result 
 
-    def extract(book):
-        spacy_extractor = spacy_extract(book)
-        spacy_dict = spacy_extractor[0]
-        spacy_names = spacy_extractor[1]
+      
+class QuickExtract():
+    def __init__(self, text):
+        self.text = text
+    
+    def extract(self):
+        extract_toponyms = ExtractMosToponyms(self.text)
 
-        natasha_extractor = natasha_extract(book)
+        spacy_extracted = extract_toponyms.spacy_extract()
+        spacy_dict = spacy_extracted[0]
+        spacy_names = spacy_extracted[1]
+
+        natasha_extractor = extract_toponyms.natasha_extract()
         natasha_dict = natasha_extractor[0]
         natasha_names = natasha_extractor[1]
 
-        black_list = merging_blacklists(spacy_names, natasha_names)
-        final_results = inner_merging_filtering(black_list, spacy_dict, natasha_dict)
+        black_list = extract_toponyms.merging_blacklists(spacy_names, natasha_names)
+        final_results = extract_toponyms.inner_merging_filtering(black_list, spacy_dict, natasha_dict)
+
         return final_results
