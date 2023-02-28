@@ -1,1 +1,1 @@
-from .toponyms import ExtractMosToponyms
+from .toponyms import ExtractMosToponyms, QuickExtract
