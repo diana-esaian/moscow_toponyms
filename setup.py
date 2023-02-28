@@ -11,6 +11,7 @@ setup(
     author_email="diana.esaian@gmail.com",
     description="Moscow toponym extractor for Russian texts",
     long_description=long_desc(),
+    long_description_content_type="text/markdown",
     packages=['moscow_toponyms'],
     url="https://github.com/diana-esaian/moscow_toponyms",
     classifiers=[
