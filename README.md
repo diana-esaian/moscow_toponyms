@@ -11,7 +11,7 @@ Returned attributes for extracted Moscow toponym:
 ## Installation
 1. Install the package using pip:
 ```sh
-pip install moscow-toponyms
+pip install moscow-toponyms==0.1.0
 ```
 2. Download _ru_core_news_sm_
 ```sh
