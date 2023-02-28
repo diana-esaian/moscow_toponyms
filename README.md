@@ -33,7 +33,7 @@ pip install https://github.com/explosion/spacy-models/releases/download/ru_core_
 ## Usage
 ```python
 >>> from moscow_toponyms import ExtractMosToponyms
->>> text = "Саша Панкратов вышел из дома и повернул налево – к Смоленской площади."
+>>> text = "Однажды весною, в час небывало жаркого заката, в Москве, на Патриарших прудах, появились два гражданина."
 >>> extract_toponyms = ExtractMosToponyms(text)
 ```
 Using SpaCy extract toponyms and their position in a text, lemmatize extracted toponyms using PyMorphy2:
@@ -47,6 +47,8 @@ Using SpaCy extract toponyms and their position in a text, lemmatize extracted t
 Using Natasha extract toponyms and their position in a text:
 ```python
 >>> natasha_extractor = extract_toponyms.natasha_extract()
+>>> print(natasha_extractor)
+({51: ['Смоленской площади', 'Смоленская площадь', 69]}, {0: 'Саша Панкратов'})
 >>> natasha_dict = natasha_extractor[0]
 >>> natasha_names = natasha_extractor[1]
 ``` 
@@ -58,4 +60,5 @@ Filter all extracted toponyms and return only Moscow toponyms in inflected and b
 ``` python
 >>> final_results = extract_toponyms.inner_merging_filtering(black_list, spacy_dict, natasha_dict)
 >>> print(final_results)
+[{'toponym': 'Смоленской площади', 'lemmatized_toponym': 'Смоленская площадь', 'start_char': 51, 'stop_char': 69}]
 ```
