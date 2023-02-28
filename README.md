@@ -23,18 +23,24 @@ pip install https://github.com/explosion/spacy-models/releases/download/ru_core_
 >>> from moscow_toponyms import QuickExtract
 >>> text = "Однажды весною, в час небывало жаркого заката, в Москве, на Патриарших прудах, появились два гражданина."
 >>> toponyms = QuickExtract(text)
->>> toponyms.extract(text)
+>>> toponyms.extract()
+[{'toponym': 'Патриарших прудах',
+  'lemmatized_toponym': 'Патриаршие пруды',
+  'start_char': 60,
+  'stop_char': 77}]
 ```
 
 ## Usage
 ```python
 >>> from moscow_toponyms import ExtractMosToponyms
->>> text = "Однажды весною, в час небывало жаркого заката, в Москве, на Патриарших прудах, появились два гражданина."
+>>> text = "Саша Панкратов вышел из дома и повернул налево – к Смоленской площади."
 >>> extract_toponyms = ExtractMosToponyms(text)
 ```
 Using SpaCy extract toponyms and their position in a text, lemmatize extracted toponyms using PyMorphy2:
 ```python
 >>> spacy_extracted = extract_toponyms.spacy_extract()
+>>> print(spacy_extracted)
+({51: 'смоленский площадь'}, {0: 'саша панкратов'})
 >>> spacy_dict = spacy_extracted[0]
 >>> spacy_names = spacy_extracted[1]
 ```
