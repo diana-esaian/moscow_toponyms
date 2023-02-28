@@ -50,7 +50,7 @@ class ExtractMosToponyms():
         for span in doc_natasha.spans:
             if span.type == 'LOC':
                 span.normalize(morph_vocab)
-                natasha_dict[span.start] = [span.normal, span.stop, span.text]  
+                natasha_dict[span.start] = [span.text, span.normal, span.stop]  
             elif span.type == 'PER':
                 span.normalize(morph_vocab)
                 natasha_names[span.start] = (span.normal)
@@ -74,10 +74,10 @@ class ExtractMosToponyms():
         for i in spacy_dict.keys():
             position = i
             if position in natasha_dict.keys():
-                loc_n = natasha_dict[position][0]
+                loc_n = natasha_dict[position][1]
                 loc_s = spacy_dict[position] # (the spelling can differ from loc_n after lemmatization)
                 if loc_n not in full_black_list:
-                    pre_final_natasha[position] = [loc_n, natasha_dict[position][1], natasha_dict[position][2]]  
+                    pre_final_natasha[position] = [natasha_dict[position][0], loc_n, natasha_dict[position][2]]  
                 if loc_s not in full_black_list:
                     pre_final_spacy[position] = loc_s
         
@@ -85,10 +85,10 @@ class ExtractMosToponyms():
         for i in pre_final_spacy.keys():
             position = i
             if position in pre_final_natasha.keys():
-                location_org = pre_final_natasha[position][2]
-                location_lem = pre_final_natasha[position][0]
+                location_org = pre_final_natasha[position][0]
+                location_lem = pre_final_natasha[position][1]
                 start_value = position
-                stop_value = pre_final_natasha[position][1]
+                stop_value = pre_final_natasha[position][2]
                 final_dict = {'toponym': location_org, 'lemmatized_toponym':location_lem, 'start_char':start_value, 'stop_char':stop_value}
                 final_result.append(final_dict)
         return final_result 
